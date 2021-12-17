@@ -1,0 +1,13 @@
+.spotifyButton {
+    background: green;
+    padding: 10px 20px 10px 20px;
+    border-radius: 40px;
+}
+
+.spotifyButton:hover {
+    background: lightgreen;
+}
+
+.spotifyButton:link {
+    color: white;
+}
