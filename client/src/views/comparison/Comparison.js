@@ -1,6 +1,6 @@
 import {useSearchParams} from "react-router-dom";
 import {Fragment, useEffect, useState} from "react";
-import {PlaylistTable} from "../../components/playlistTable";
+import {PlaylistTable} from "../../components/PlaylistTable";
 import axios from "axios";
 import JSConfetti from "js-confetti";
 import "./comparison.css";
@@ -51,7 +51,11 @@ export default function Comparison() {
 
     return (
         <div className="App">
-            {loading ? null :
+            {loading ?
+                <Fragment>
+                    <h1>Loading!</h1>
+                </Fragment>
+                :
                 <Fragment>
                     <h1>The results are in!</h1>
                     <h2>{stats ? `${stats.sameSongs} songs are on both of these lists` : null}</h2>

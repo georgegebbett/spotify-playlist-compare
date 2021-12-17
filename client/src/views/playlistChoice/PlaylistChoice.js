@@ -57,9 +57,8 @@ export default function PlaylistChoice() {
         <Fragment>
             {spotifyToken !== undefined && playlists !== undefined ? <WebPlayback token={spotifyToken} uri={playlists[0].uri}/> : null}
             <div className="App">
-                <p>
-                    The playlists are:
-                </p>
+                <h1>Here are all your Top Songs playlists! Which two would you like to compare?</h1>
+                <h3>If you expected to see more playlists here, make sure they are saved to your library!</h3>
                 <br/>
                 <Form onSubmit={handleSubmit} onChange={handleChange}>
                     <Table striped hover bordered>

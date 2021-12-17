@@ -7,12 +7,15 @@ const path = require("path");
 const SPOTIFY_SCOPES = ['playlist-read-private', 'streaming', 'user-modify-playback-state']
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
+const REDIRECT_URI = process.env.SPOTIFY_REDIRECT_URI;
+
+const PLAYLIST_CHOICE_URL = process.env.PLAYLIST_CHOICE
+
+
+
 const SPOTIFY_STATE = 'state';
 
-
 const PORT = process.env.PORT || 3001;
-
-const REDIRECT_URI = `https://spotify-compare-george.herokuapp.com/api/auth/loginCallback`
 
 
 const app = express();
@@ -50,7 +53,7 @@ app.get("/api/auth/loginCallback", (req, res) => {
         }
     )
 
-    res.redirect("https://spotify-compare-george.herokuapp.com/playlistChoice")
+    res.redirect(PLAYLIST_CHOICE_URL)
 })
 
 app.get("/api/auth/spotifyToken", ((req, res) => {

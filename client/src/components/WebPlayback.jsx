@@ -31,9 +31,15 @@ function WebPlayback(props) {
                               device_id
                           }) => {
                 getOAuthToken(access_token => {
+                    const trackNo = Math.floor(Math.random() * 100);
                     fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                         method: 'PUT',
-                        body: JSON.stringify({context_uri: spotify_uri }),
+                        body: JSON.stringify({
+                            context_uri: spotify_uri,
+                            offset: {
+                                position: trackNo
+                            }
+                        }),
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`
