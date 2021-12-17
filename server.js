@@ -1,15 +1,19 @@
 const express = require("express");
+const cors = require("cors");
 
 const SpotifyWebApi = require("spotify-web-api-node");
+const path = require("path");
 
 const SPOTIFY_SCOPES = ['playlist-read-private', 'streaming', 'user-modify-playback-state']
-const REDIRECT_URI = 'http://localhost:3001/api/auth/loginCallback'
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 const SPOTIFY_STATE = 'state';
 
 
 const PORT = process.env.PORT || 3001;
+
+const REDIRECT_URI = `http://localhost:${PORT}/api/auth/loginCallback`
+
 
 const app = express();
 
@@ -19,6 +23,7 @@ const spotifyApi = new SpotifyWebApi({
     clientSecret: CLIENT_SECRET
 });
 
+app.use(cors());
 app.use(express.json()); // Recognize Request Objects as JSON objects
 app.use(express.static('build')); // serve static files (css & js) from the 'public' directory
 
@@ -45,7 +50,7 @@ app.get("/api/auth/loginCallback", (req, res) => {
         }
     )
 
-    res.redirect("http://localhost:3000/playlistChoice")
+    res.redirect(`http://localhost:${PORT}/playlistChoice`)
 })
 
 app.get("/api/auth/spotifyToken", ((req, res) => {
@@ -148,6 +153,15 @@ app.get("/api/app/playlistName", ((req, res) => {
         })
         .catch(e => console.log(e));
 }))
+
+if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    app.use(express.static(path.join(__dirname, 'client/build')));
+// Handle React routing, return all requests to React app
+    app.get('*', function(req, res) {
+        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+}
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
