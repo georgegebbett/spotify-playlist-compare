@@ -19,6 +19,9 @@ const spotifyApi = new SpotifyWebApi({
     clientSecret: CLIENT_SECRET
 });
 
+app.use(express.json()); // Recognize Request Objects as JSON objects
+app.use(express.static('build')); // serve static files (css & js) from the 'public' directory
+
 
 app.get("/api/auth/getLoginUrl", (req, res) => {
     let url = spotifyApi.createAuthorizeURL(SPOTIFY_SCOPES, SPOTIFY_STATE);
