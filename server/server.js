@@ -2,7 +2,7 @@ const express = require("express");
 
 const SpotifyWebApi = require("spotify-web-api-node");
 
-const SPOTIFY_SCOPES = ['playlist-read-private']
+const SPOTIFY_SCOPES = ['playlist-read-private', 'streaming', 'user-modify-playback-state']
 const REDIRECT_URI = 'http://localhost:3001/api/auth/loginCallback'
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
@@ -42,14 +42,17 @@ app.get("/api/auth/loginCallback", (req, res) => {
         }
     )
 
-    res.redirect("http://localhost:3000/callback")
+    res.redirect("http://localhost:3000/playlistChoice")
 })
+
+app.get("/api/auth/spotifyToken", ((req, res) => {
+    res.send(spotifyApi.getAccessToken());
+}))
 
 app.get("/api/app/userPlaylists", ((req, res) => {
     spotifyApi.getMe()?.then(data => {
         let userId = (data.body.id);
         spotifyApi.getUserPlaylists(userId).then(data => {
-            console.log(data.body.items);
             let playlistList = [];
 
             let topSongRegExp = /^Your Top Songs (\d+)/;
@@ -59,7 +62,8 @@ app.get("/api/app/userPlaylists", ((req, res) => {
                     playlistList.push({
                         name: playlist.name,
                         year: topSongRegExp.exec(playlist.name)[1],
-                        id: playlist.id
+                        id: playlist.id,
+                        uri: playlist.uri
                     });
                 }
             })
@@ -69,6 +73,78 @@ app.get("/api/app/userPlaylists", ((req, res) => {
     });
 }))
 
+app.get("/api/app/playlistSongs", ((req, res) => {
+    spotifyApi.getPlaylistTracks(req.query.playlist)
+        .then(data => {
+            let resArr = data.body.items.map(item => {return {id: item.track.id, name: item.track.name, artist: item.track.artists[0].name}})
+            console.log(resArr.length);
+            res.json(resArr);
+        })
+        .catch(e => console.log(e));
+}))
+
+app.get("/api/app/playlistComparison", (async (req, res) => {
+    let playlistResult = {stats: {sameSongs: 0}, playlist1: {name: "", tracks: []}, playlist2: {name: "", tracks: []}};
+
+    console.log(req.query)
+
+    playlistResult.playlist1.name = (await spotifyApi.getPlaylist(req.query.p1)).body.name;
+    playlistResult.playlist2.name = (await spotifyApi.getPlaylist(req.query.p2)).body.name;
+
+    spotifyApi.getPlaylistTracks(req.query.p1)
+        .then(data => {
+            let index = 0;
+            playlistResult.playlist1.tracks = data.body.items.map(item => {
+                index++;
+                return {
+                    index: index,
+                    id: item.track.id,
+                    name: item.track.name,
+                    artist: item.track.artists[0].name,
+                    inOtherList: false
+                }
+            })
+            spotifyApi.getPlaylistTracks(req.query.p2)
+                .then(data => {
+                    let index = 0;
+                    playlistResult.playlist2.tracks = data.body.items.map(item => {
+                        index++;
+                        return {
+                            index: index,
+                            id: item.track.id,
+                            name: item.track.name,
+                            artist: item.track.artists[0].name,
+                            inOtherList: false
+                        }
+                    })
+                    for (let track of playlistResult.playlist1.tracks) {
+                        for (let track2 of playlistResult.playlist2.tracks) {
+                            if (track.id === track2.id) {
+                                track.inOtherList = true;
+                                track2.inOtherList = true;
+                                playlistResult.stats.sameSongs++;
+                            }
+                        }
+                    }
+
+                    res.json(playlistResult);
+                })
+                .catch(e => console.log("error"));
+        })
+        .catch(e => console.log("error"));
+
+
+
+
+}))
+
+app.get("/api/app/playlistName", ((req, res) => {
+    spotifyApi.getPlaylist(req.query.playlist)
+        .then(data => {
+            res.json({name: data.body.name});
+        })
+        .catch(e => console.log(e));
+}))
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
