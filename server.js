@@ -12,7 +12,7 @@ const SPOTIFY_STATE = 'state';
 
 const PORT = process.env.PORT || 3001;
 
-const REDIRECT_URI = `http://localhost:${PORT}/api/auth/loginCallback`
+const REDIRECT_URI = `https://spotify-compare-george.herokuapp.com/api/auth/loginCallback`
 
 
 const app = express();
@@ -50,7 +50,7 @@ app.get("/api/auth/loginCallback", (req, res) => {
         }
     )
 
-    res.redirect(`http://localhost:${PORT}/playlistChoice`)
+    res.redirect("https://spotify-compare-george.herokuapp.com/playlistChoice")
 })
 
 app.get("/api/auth/spotifyToken", ((req, res) => {
