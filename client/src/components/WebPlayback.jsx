@@ -5,6 +5,8 @@ function WebPlayback(props) {
     const [player, setPlayer] = useState(undefined);
     const {token} = props;
 
+    const {playbackEnabled} = props;
+
     useEffect(() => {
 
         const script = document.createElement("script");
@@ -52,11 +54,13 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                play({
-                    playerInstance: player,
-                    spotify_uri: props.uri,
-                    device_id: device_id
-                });
+                if (playbackEnabled) {
+                    play({
+                        playerInstance: player,
+                        spotify_uri: props.uri,
+                        device_id: device_id
+                    });
+                }
             });
 
             player.addListener('not_ready', ({ device_id }) => {

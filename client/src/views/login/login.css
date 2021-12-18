@@ -1,0 +1,8 @@
+.login-div {
+    background-color: #1D3557;
+    color: #f1faee;
+}
+
+.login-hero-emoji {
+    font-size: calc(60px + 5vmin);
+}
