@@ -6,7 +6,7 @@ export function PlaylistTable(props) {
 
     return (
         <Fragment>
-            <Table striped hover bordered size="sm" className="playlist-table">
+            <Table hover bordered size="sm" className="playlist-table">
                 <thead>
                     <tr>
                         <th colSpan="3">{playlistData.name}</th>
@@ -22,7 +22,7 @@ export function PlaylistTable(props) {
                         playlistData ?
                             playlistData.tracks.map(track => {
                                 return (
-                                    <tr key={track.id} className={track.inOtherList ? "table-warning" : null}>
+                                    <tr key={track.id} className={track.inOtherList ? "in-other-row" : null}>
                                         <td>{track.index}</td>
                                         <td>{track.name}</td>
                                         <td>{track.artist}</td>

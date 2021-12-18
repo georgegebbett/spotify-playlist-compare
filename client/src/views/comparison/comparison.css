@@ -1,7 +1,42 @@
 .table-container {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #f1faee;
+    text-align: center;
 }
 
 .playlist-table {
     margin: 1vw;
+    background-color: #457b9d;
+}
+
+.comparison-container {
+    background-color: #1D3557;
+    color: #f1faee;
+}
+
+.button-div {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 10px;
+}
+
+.loading-div {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.comparison-button {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.in-other-row {
+    background-color: #e63946;
 }

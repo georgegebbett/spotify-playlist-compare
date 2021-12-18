@@ -12,6 +12,8 @@ export default function Comparison(props) {
     const [comparisonResult, setComparisonResult] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
+    const [updateData, setUpdateData] = useState(false);
+
     const {spotifyApi} = props;
 
     const confetti = new JSConfetti();
@@ -27,6 +29,13 @@ export default function Comparison(props) {
         if (selectedPlaylists.p1 === undefined || selectedPlaylists.p2 === undefined) return;
 
         const comparePlaylists = async () => {
+
+            if (props.spotifyApi.getAccessToken() === undefined) {
+                updateToken();
+                setUpdateData(!updateData);
+                return;
+            }
+
             let playlistResult = {stats: {sameSongs: 0}, playlist1: {name: "", tracks: []}, playlist2: {name: "", tracks: []}};
 
             playlistResult.playlist1.name = (await spotifyApi.getPlaylist(selectedPlaylists.p1)).body.name;
@@ -71,8 +80,9 @@ export default function Comparison(props) {
                             setComparisonResult(playlistResult);
                             setLoading(false);
                             confetti.addConfetti({
-                                confettiRadius: 6,
+                                emojiSize: 80,
                                 confettiNumber: 500,
+                                emojis: ["🎼", "🪗", "🎸", "🎹", "🎺", "🎻", "🪕", "🥁", "🪘", "🎤"]
                             });
                         })
                         .catch(e => console.log("error"));
@@ -80,25 +90,49 @@ export default function Comparison(props) {
                 .catch(e => console.log("error"));
         }
 
+        const updateToken = () => {
+            if (props.spotifyApi.getAccessToken() === undefined) {
+                if (localStorage.getItem("SPOTIFY_TOKEN") !== undefined) {
+                    props.spotifyApi.setAccessToken(localStorage.getItem("SPOTIFY_TOKEN"));
+                }
+            }
+        }
+
+        updateToken();
         comparePlaylists();
-    }, [selectedPlaylists]);
+    }, [selectedPlaylists, updateData]);
 
     const resetClickHandler = (event) => {
       event.preventDefault();
       navigate("/");
     }
 
+    const changeListClickHandler = (event) => {
+        event.preventDefault();
+        navigate("/playlistChoice");
+    }
+
     return (
-        <div className="App">
+        <div className="comparison-container">
             {loading ?
                 <Fragment>
-                    <h1>Loading!</h1>
+                    <div className="loading-div">
+                        <h1>🥁 Loading... 🥁</h1>
+                        <br/>
+                        <h3>Jesus your music is awful 🤢</h3>
+                    </div>
                 </Fragment>
                 :
                 <Fragment>
-                    <h1>The results are in!</h1>
-                    <h2>{comparisonResult ? `${comparisonResult.stats.sameSongs} songs are on both of these lists` : null}</h2>
-                    <Button variant="primary" onClick={resetClickHandler}>Back to the beginning!</Button>
+                    <div className="title-div">
+                        <h1>The results are in!</h1>
+                        <h2>{comparisonResult ? `${comparisonResult.stats.sameSongs} songs (the red ones) are on both of these lists` : null}</h2>
+                        <h4>{comparisonResult ? `This basically means you're only ${100 - comparisonResult.stats.sameSongs}% original...` : null}</h4>
+                    </div>
+                    <div className="button-div">
+                        <Button className="comparison-button" variant="primary" onClick={changeListClickHandler}>Try some other playlists!</Button>
+                        <Button className="comparison-button" variant="danger" onClick={resetClickHandler}>Get me out of here!</Button>
+                    </div>
                     <div className="table-container">
                         <PlaylistTable playlistData={comparisonResult.playlist1}/>
                         <PlaylistTable playlistData={comparisonResult.playlist2}/>

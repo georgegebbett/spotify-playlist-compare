@@ -15,7 +15,7 @@ export default function PlaylistChoice(props) {
 
     const [updateData, setUpdateData] = useState(false);
 
-    const [playbackEnabled] = useState(false);
+    const [playbackEnabled] = useState(true);
 
     let navigate = useNavigate();
 
@@ -78,6 +78,11 @@ export default function PlaylistChoice(props) {
         navigate(`/compare?p1=${selectedPlaylists.p1}&p2=${selectedPlaylists.p2}`);
     }
 
+    const handleExit = (event) => {
+        event.preventDefault();
+        navigate("/");
+    }
+
     const handleChange = (event) => {
         setSelectedPlaylists({...selectedPlaylists, [event.target.name]: event.target.value})
     }
@@ -88,8 +93,10 @@ export default function PlaylistChoice(props) {
             <div className="playlist-choice-div">
                 <div className="title-div">
                     {playbackEnabled ? null : <h1 style={{color: "#E63946"}}>Playback disabled</h1>}
+                    <h1 className="login-hero-emoji">🎧🤔</h1>
                     <h1>Here are all your Top Songs playlists! Which two would you like to compare?</h1>
                     <h3>If you expected to see more playlists here, make sure they are saved to your library!</h3>
+                    <h5>Choose one playlist 1 and one playlist 2 - then the compare button will appear!</h5>
                 </div>
                 <br/>
                 <Form onSubmit={handleSubmit} onChange={handleChange}>
@@ -117,8 +124,11 @@ export default function PlaylistChoice(props) {
                             }
                         </tbody>
                     </Table>
-                    <Button className="compare-button" variant="success" type="submit" hidden={!compareEnabled}>Compare!</Button>
                 </Form>
+                <div className="playlist-button-div">
+                    <Button className="compare-button" variant="success" type="submit" hidden={!compareEnabled} onClick={handleSubmit}>Compare!</Button>
+                    <Button className="compare-button" variant="danger" hidden={!compareEnabled} onClick={handleExit}>Actually I don't want to see this, I already know I have terrible taste</Button>
+                </div>
             </div>
         </Fragment>
     )

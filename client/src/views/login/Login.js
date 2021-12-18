@@ -27,6 +27,7 @@ export default function Login(props) {
             <header className="App-header">
                 <h1 className="login-hero-emoji">{currentEmoji}</h1>
                 <h1>How much did your taste <i>really</i> change between your Spotify Wrappeds? 🤔</h1>
+                <h2>Did you actually manage to listen to any new music, or are you still clinging to your comfort albums?</h2>
                 <h3>Why don't we find out?</h3>
                 <br/>
                 <LoginWithSpotify spotifyApi={props.spotifyApi}/>
