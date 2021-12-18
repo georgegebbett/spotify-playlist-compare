@@ -1,0 +1,23 @@
+.selection-table {
+    color: white;
+    background-color: #457b9d;
+}
+
+.playlist-choice-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #1D3557;
+    min-height: 100vh;
+}
+
+.title-div {
+    text-align: center;
+    color: #f1faee;
+}
+
+.compare-button {
+    flex-grow: 3;
+    justify-self: flex-end;
+}

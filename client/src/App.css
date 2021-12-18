@@ -39,3 +39,7 @@
     transform: rotate(360deg);
   }
 }
+
+.error-hero {
+  font-size: calc(60px + 5vmin);
+}

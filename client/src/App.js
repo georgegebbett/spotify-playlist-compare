@@ -1,7 +1,5 @@
-import './App.css';
+// import './App.css';
 import React from "react";
-
-
 import {
     BrowserRouter as Router,
     Routes,
@@ -29,7 +27,7 @@ function App() {
                 <Route path="/" element={<Login spotifyApi={spotifyApi}/>}/>
                 <Route path="/loginCallback" element={<Callback spotifyApi={spotifyApi}/>}/>
                 <Route path="/playlistChoice" element={<PlaylistChoice spotifyApi={spotifyApi}/>}/>
-                <Route path="/compare" element={<Comparison/>}/>
+                <Route path="/compare" element={<Comparison spotifyApi={spotifyApi}/>}/>
                 <Route path="*" element={<NotFound/>}/>
             </Routes>
         </Router>
