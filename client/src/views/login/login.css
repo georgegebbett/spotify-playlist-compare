@@ -9,6 +9,16 @@
     text-align: center;
 }
 
+@media (max-width: 900px) {
+    .login-div {
+        display: flex;
+        flex-direction: column;
+        max-width: 100vh;
+        overflow: no-content;
+        padding-inline: 1rem;
+    }
+}
+
 .login-hero-emoji {
     font-size: calc(60px + 5vmin);
 }

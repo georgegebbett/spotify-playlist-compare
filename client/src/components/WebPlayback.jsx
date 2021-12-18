@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import {Button, Modal} from "react-bootstrap";
 
 function WebPlayback(props) {
 
     const [player, setPlayer] = useState(undefined);
     const {token} = props;
+    const [show, setShow] = useState(true);
 
     const {playbackEnabled} = props;
 
@@ -54,13 +56,26 @@ function WebPlayback(props) {
 
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
-                if (playbackEnabled) {
-                    play({
-                        playerInstance: player,
-                        spotify_uri: props.uri,
-                        device_id: device_id
-                    });
-                }
+
+                player.getCurrentState().then(state => {
+                    if (!state) {
+                        if (playbackEnabled) {
+                            play({
+                                playerInstance: player,
+                                spotify_uri: props.uri,
+                                device_id: device_id
+                            });
+                        }
+                    } else {
+                        if (state.paused) {
+                            player.resume();
+                        }
+                    }
+                })
+
+
+
+
             });
 
             player.addListener('not_ready', ({ device_id }) => {
@@ -73,11 +88,32 @@ function WebPlayback(props) {
         };
     }, []);
 
+
+    const handlePlaybackCheck = () => {
+        console.log("aaaa");
+        player.getCurrentState().then(state => {
+            console.log(state);
+            if (state.paused) {
+                player.resume();
+            }
+        })
+        setShow(false);
+        localStorage.setItem("PLAYBACK_INITIATED", "true");
+    }
+
+
+
     return (
         <>
             <div className="container">
                 <div className="main-wrapper">
-
+                    <Modal
+                        show={show}
+                        backdrop="static"
+                        centered
+                    >
+                        <Button onClick={handlePlaybackCheck}>Click here to get started</Button>
+                    </Modal>
                 </div>
             </div>
         </>

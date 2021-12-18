@@ -1,34 +1,15 @@
-@media (max-width: 900px) {
-    .table-container {
-        display: flex;
-        flex-direction: column;
-        max-width: 100vh;
-        overflow: no-content;
-    }
-}
-
-@media (min-width: 901px) {
-
-    .table-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        color: #f1faee;
-        text-align: center;
-    }
-}
-
-
-
 .playlist-table {
-    margin: 1vw;
     background-color: #457b9d;
 }
 
 .comparison-container {
     background-color: #1D3557;
     color: #f1faee;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    /*min-width: 100vw;*/
 }
 
 .button-div {
@@ -53,4 +34,44 @@
 
 .in-other-row {
     background-color: #e63946;
+}
+
+@media (max-width: 900px) {
+    .table-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 95vw;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .comparison-container {
+        align-items: center;
+    }
+
+    td {
+        text-overflow: ellipsis;
+    }
+
+    .playlist-table {
+        margin: 0px;
+    }
+
+}
+
+@media (min-width: 901px) {
+
+    .table-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        color: #f1faee;
+        text-align: center;
+    }
+    .playlist-table {
+        margin: 1vw;
+
+    }
 }
