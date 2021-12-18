@@ -32,7 +32,7 @@ app.use(express.static('build')); // serve static files (css & js) from the 'pub
 
 
 app.get("/api/auth/getLoginUrl", (req, res) => {
-    let url = spotifyApi.createAuthorizeURL(SPOTIFY_SCOPES, SPOTIFY_STATE);
+    let url = spotifyApi.createAuthorizeURL(SPOTIFY_SCOPES, SPOTIFY_STATE, true, "token");
 
     res.json({url: url});
 })

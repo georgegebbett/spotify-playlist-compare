@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import WebPlayback from "../../components/WebPlayback";
 
 
-export default function PlaylistChoice() {
+export default function PlaylistChoice(props) {
 
     const [playlists, setPlaylists] = useState(undefined);
     const [selectedPlaylists, setSelectedPlaylists] = useState({p1: "", p2: ""});
@@ -22,13 +22,38 @@ export default function PlaylistChoice() {
             setPlaylists(data);
         }
 
+        const newPlaylists = () => {
+            props.spotifyApi.getMe()?.then(data => {
+                let userId = (data.body.id);
+                props.spotifyApi.getUserPlaylists(userId).then(data => {
+                    let playlistList = [];
+
+                    let topSongRegExp = /^Your Top Songs (\d+)/;
+
+                    data.body.items.map(playlist => {
+                        if (topSongRegExp.test(playlist.name)) {
+                            playlistList.push({
+                                name: playlist.name,
+                                year: topSongRegExp.exec(playlist.name)[1],
+                                id: playlist.id,
+                                uri: playlist.uri
+                            });
+                        }
+                    })
+
+                    setPlaylists(playlistList);
+                })
+            });
+        }
+
         const getToken = async () => {
             const {data} = await axios.get('/api/auth/spotifyToken');
             console.log(data);
             setSpotifyToken(data);
         }
 
-        getPlaylists();
+        // getPlaylists();
+        newPlaylists();
         getToken();
 
     }, []);
@@ -55,7 +80,7 @@ export default function PlaylistChoice() {
 
     return (
         <Fragment>
-            {spotifyToken !== undefined && playlists !== undefined ? <WebPlayback token={spotifyToken} uri={playlists[0].uri}/> : null}
+            {spotifyToken !== undefined && playlists !== undefined ? <WebPlayback token={props.spotifyApi.getAccessToken()} uri={playlists[0].uri}/> : null}
             <div className="App">
                 <h1>Here are all your Top Songs playlists! Which two would you like to compare?</h1>
                 <h3>If you expected to see more playlists here, make sure they are saved to your library!</h3>
