@@ -1,11 +1,25 @@
-.table-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    color: #f1faee;
-    text-align: center;
+@media (max-width: 900px) {
+    .table-container {
+        display: flex;
+        flex-direction: column;
+        max-width: 100vh;
+        overflow: no-content;
+    }
 }
+
+@media (min-width: 901px) {
+
+    .table-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        color: #f1faee;
+        text-align: center;
+    }
+}
+
+
 
 .playlist-table {
     margin: 1vw;
