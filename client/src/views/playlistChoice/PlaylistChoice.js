@@ -78,6 +78,12 @@ export default function PlaylistChoice(props) {
         navigate(`/compare?p1=${selectedPlaylists.p1}&p2=${selectedPlaylists.p2}`);
     }
 
+    const handleSample = (event) => {
+
+        event.preventDefault();
+        navigate("/compare?p1=4hrpMhY6MHfyBG862CY3ZO&p2=7AlmxZlNdsEKQZajXO6F7g");
+    }
+
     const handleExit = (event) => {
         event.preventDefault();
         navigate("/");
@@ -99,36 +105,45 @@ export default function PlaylistChoice(props) {
                     <h5>Choose one playlist 1 and one playlist 2 - then the compare button will appear!</h5>
                 </div>
                 <br/>
-                <Form onSubmit={handleSubmit} onChange={handleChange}>
-                    <Table striped hover bordered className="selection-table">
-                        <thead>
+                {playlists ?
+                <div>
+                    <Form onSubmit={handleSubmit} onChange={handleChange}>
+                        <Table striped hover bordered className="selection-table">
+                            <thead>
                             <tr>
                                 <td>Year</td>
                                 <td>Playlist</td>
                                 <td>Playlist 1</td>
                                 <td>Playlist 2</td>
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             {
                                 playlists ? playlists.map(playlist => {
-                                    return(
+                                    return (
                                         <tr key={playlist.id}>
                                             <td>{playlist.year}</td>
                                             <td>{playlist.name}</td>
-                                            <td><FormCheck type="radio" name="p1" value={playlist.id} /></td>
-                                            <td><FormCheck type="radio" name="p2" value={playlist.id} /></td>
+                                            <td><FormCheck type="radio" name="p1" value={playlist.id}/></td>
+                                            <td><FormCheck type="radio" name="p2" value={playlist.id}/></td>
                                         </tr>
                                     )
                                 }) : null
                             }
-                        </tbody>
-                    </Table>
-                </Form>
-                <div className="playlist-button-div">
-                    <Button className="compare-button" variant="success" type="submit" hidden={!compareEnabled} onClick={handleSubmit}>Compare!</Button>
-                    <Button className="compare-button" variant="danger" hidden={!compareEnabled} onClick={handleExit}>Actually I don't want to see this, I already know I have terrible taste</Button>
+                            </tbody>
+                        </Table>
+                    </Form>
+                        <div className="playlist-button-div">
+                        <Button className="compare-button" variant="success" type="submit" hidden={!compareEnabled} onClick={handleSubmit}>Compare!</Button>
+                        <Button className="compare-button" variant="danger" hidden={!compareEnabled} onClick={handleExit}>Actually I don't want to see this, I already know I have terrible taste</Button>
+                        </div>
+                </div> :
+                <div className="title-div">
+                    <h3>You don't seem to have any suitable playlists for comparison 🙁</h3>
+                    <h4>You need to have playlists with 'Your Top Songs' in the name for this to work</h4>
+                    <Button onClick={handleSample}>Try clicking here to try this with some sample playlists I guess</Button>
                 </div>
+                }
             </div>
         </Fragment>
     )
