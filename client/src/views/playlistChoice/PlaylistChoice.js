@@ -105,7 +105,7 @@ export default function PlaylistChoice(props) {
                     <h5>Choose one playlist 1 and one playlist 2 - then the compare button will appear!</h5>
                 </div>
                 <br/>
-                {playlists ?
+                {playlists !== [] ?
                 <div>
                     <Form onSubmit={handleSubmit} onChange={handleChange}>
                         <Table striped hover bordered className="selection-table">
