@@ -20,7 +20,7 @@ export default function PlaylistChoice(props) {
     let navigate = useNavigate();
 
     useEffect(() => {
-        const getPlaylists = () => {
+        const getPlaylists = async () => {
             if (props.spotifyApi.getAccessToken() === undefined) {
                 updateToken();
                 setUpdateData(!updateData);
@@ -28,7 +28,7 @@ export default function PlaylistChoice(props) {
             }
             props.spotifyApi.getMe()?.then(data => {
                 let userId = (data.body.id);
-                props.spotifyApi.getUserPlaylists(userId).then(data => {
+                props.spotifyApi.getUserPlaylists(userId, { limit: 50, offset: 0 }).then(data => {
                     let playlistList = [];
 
                     let topSongRegExp = /^Your Top Songs (\d+)/;
@@ -42,7 +42,7 @@ export default function PlaylistChoice(props) {
                                 uri: playlist.uri
                             });
                         }
-                    })
+                    });
 
                     setPlaylists(playlistList);
                 })
